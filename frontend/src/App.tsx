@@ -4,7 +4,7 @@ import { usePrayerStore } from './store/prayerStore';
 import PrayerTimesCard from './components/PrayerTimesCard';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
-import { Circles } from 'react-loader-spinner';
+// import { Circles } from 'react-loader-spinner';
 
 import fajrIcon from './assets/fazar.png';
 import dhuhrIcon from './assets/dhuhr.png';
@@ -99,13 +99,7 @@ const App: React.FC = () => {
       <Header />
       {loading ? (
        <div className="fixed inset-0 flex justify-center items-center bg-white z-50">
-    <Circles
-      height="50"
-      width="50"
-      color="#8a57dc"
-      ariaLabel="circles-loading"
-      visible={true}
-    />
+    Loading...
   </div>
       ) : (
         <PrayerTimesCard

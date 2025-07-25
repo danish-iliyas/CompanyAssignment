@@ -78,6 +78,17 @@ const PrayerTimesCard: React.FC<Props> = ({
     return describeArc(centerX, centerY, radius, startAngle, endAngle);
   };
    const currentPrayerData = prayers.find(p => p.name === currentPrayerName);
+
+
+   const formatTo12Hour = (time: string): string => {
+  const [hourStr, minuteStr] = time.split(':');
+  let hour = parseInt(hourStr, 10);
+  const minute = parseInt(minuteStr, 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12 || 12;
+  return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+};
+
   return (
     <div
       style={{
@@ -127,7 +138,7 @@ const PrayerTimesCard: React.FC<Props> = ({
                 filter: isCurrent ? 'none' : 'grayscale(40%)',
               }} />
               <div style={{ fontSize: 12 }}>{prayer.name}</div>
-              <div style={{ fontSize: 12 }}>{prayer.time}</div>
+             <div style={{ fontSize: 12 }}>{formatTo12Hour(prayer.time)}</div>
             </div>
           );
         })}

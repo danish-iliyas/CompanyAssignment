@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import logo from '../assets/logo.png';
+import mapIcon from '../assets/map-pin-fill.png';
+
 import { usePrayerStore } from '../store/prayerStore';
 
 const Header: React.FC = () => {
@@ -97,7 +99,10 @@ const Header: React.FC = () => {
               Select Location
             </div>
           )}
-          <div style={{ fontSize: '12px', color: '#8A57DC' }}>📍 {address}</div>
+          <div style={{ fontSize: '12px', color: '#8A57DC',display: 'flex', alignItems: 'center', marginTop: 2,gap: 4 }}>
+            <img src={mapIcon} alt="icon" srcset="" />
+            {/* {mapIcon} */}
+             <p>{address}</p></div>
         </div>
       </div>
 

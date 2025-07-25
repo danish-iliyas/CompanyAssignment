@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import logo from '../assets/logo.png';
 import mapIcon from '../assets/map-pin-fill.png';
-
 import { usePrayerStore } from '../store/prayerStore';
 
 const Header: React.FC = () => {
@@ -16,19 +16,28 @@ const Header: React.FC = () => {
     if (!selectedCity) {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-          );
-          const data = await res.json();
-          const city =
-            data.address.city ||
-            data.address.town ||
-            data.address.village ||
-            data.address.state;
-          setAddress(city);
-          setLocation(city, lat, lon);
+          try {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const res = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
+              params: {
+                format: 'json',
+                lat,
+                lon,
+              },
+            });
+            const data = res.data;
+            const city =
+              data.address.city ||
+              data.address.town ||
+              data.address.village ||
+              data.address.state;
+            setAddress(city);
+            setLocation(city, lat, lon);
+          } catch (error) {
+            console.error('Failed to get location:', error);
+            setAddress('Location unavailable');
+          }
         },
         () => {
           setAddress('Location unavailable');
@@ -41,14 +50,22 @@ const Header: React.FC = () => {
 
   // Search locations dynamically
   useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        const res = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+          params: {
+            format: 'json',
+            q: search,
+            limit: 5,
+          },
+        });
+        setResults(res.data);
+      } catch (error) {
+        console.error('Failed to fetch search results:', error);
+      }
+    };
+
     if (search.trim().length > 2) {
-      const fetchResults = async () => {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${search}&limit=5`
-        );
-        const data = await res.json();
-        setResults(data);
-      };
       fetchResults();
     } else {
       setResults([]);
@@ -99,10 +116,19 @@ const Header: React.FC = () => {
               Select Location
             </div>
           )}
-          <div style={{ fontSize: '12px', color: '#8A57DC',display: 'flex', alignItems: 'center', marginTop: 2,gap: 4 }}>
-            <img src={mapIcon} alt="icon" srcset="" />
-            {/* {mapIcon} */}
-             <p>{address}</p></div>
+          <div
+            style={{
+              fontSize: '12px',
+              color: '#8A57DC',
+              display: 'flex',
+              alignItems: 'center',
+              marginTop: 2,
+              gap: 4,
+            }}
+          >
+            <img src={mapIcon} alt="icon" />
+            <p>{address}</p>
+          </div>
         </div>
       </div>
 

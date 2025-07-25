@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import homeIcon from '../assets/icons/Home.png';
 import quranIcon from '../assets/icons/Quran.png';
 import maktabIcon from '../assets/icons/Maktab.png';

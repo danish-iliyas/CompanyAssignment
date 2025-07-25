@@ -10,7 +10,7 @@ interface Prayer {
 interface Props {
   prayers: Prayer[];
   currentPrayerName: string;
-  currentPeayerIcon?: JSX.Element;
+  currentPeayerIcon?: React.ReactNode;
   nextPrayerIn: string;
   day: string;
 }

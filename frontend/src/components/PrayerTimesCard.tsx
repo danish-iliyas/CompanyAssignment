@@ -33,22 +33,28 @@ const PrayerTimesCard: React.FC<Props> = ({
   };
 
   let progress = 0;
- if (currentIndex >= 0) {
+if (currentIndex >= 0) {
   const currentPrayerTime = getPrayerDate(prayers[currentIndex].time);
   let nextPrayerTime: Date;
 
   if (currentIndex === prayers.length - 1) {
-    // Last prayer (Isha): next is Fajr tomorrow
+    // Last prayer, next is tomorrow's Fajr
     nextPrayerTime = getPrayerDate(prayers[0].time);
     nextPrayerTime.setDate(nextPrayerTime.getDate() + 1);
   } else {
     nextPrayerTime = getPrayerDate(prayers[currentIndex + 1].time);
   }
 
+  // Handle now possibly being past midnight (e.g., after Isha)
+  if (now < currentPrayerTime && currentIndex === prayers.length - 1) {
+    now.setDate(now.getDate() + 1);
+  }
+
   const duration = nextPrayerTime.getTime() - currentPrayerTime.getTime();
   const passed = now.getTime() - currentPrayerTime.getTime();
   progress = Math.min(Math.max(passed / duration, 0), 1);
 }
+
 
 
   function describeArc(x: number, y: number, radius: number, startAngle: number, endAngle: number) {
